@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кимс суши — суши и роллы с доставкой</title>
+<meta name="description" content="Кимс суши — свежие суши и роллы с доставкой за 60 минут.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary:#EA5B0C;
+    --primary-dark:#C94A08;
+    --primary-darker:#9C3A06;
+    --accent:#FDBA74;
+    --accent-light:#FFE3C2;
+    --cream:#FFF8F0;
+    --dark:#2B1607;
+    --sidebar:#20120A;
+    --gray:#7A6A5C;
+    --white:#FFFFFF;
+    --radius:18px;
+    --shadow:0 10px 30px rgba(154,58,6,0.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Manrope',sans-serif;color:var(--dark);background:var(--cream);line-height:1.55;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4{font-family:'Nunito',sans-serif;font-weight:900;line-height:1.15;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;border-radius:999px;font-weight:700;font-size:15px;border:none;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,background .2s;white-space:nowrap;}
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:var(--primary);color:#fff;box-shadow:0 8px 20px rgba(234,91,12,.35);}
+  .btn-primary:hover{background:var(--primary-dark);}
+  .btn-outline{background:transparent;color:var(--white);border:2px solid rgba(255,255,255,.7);}
+  .btn-outline:hover{background:rgba(255,255,255,.15);}
+  .eyebrow{display:inline-block;font-weight:800;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--primary-dark);background:var(--accent-light);padding:6px 14px;border-radius:999px;margin-bottom:14px;}
+  .section{padding:70px 0;}
+  .section-head{max-width:600px;margin:0 auto 40px;text-align:center;}
+  .section-head h2{font-size:clamp(26px,3.6vw,36px);margin-bottom:12px;}
+  .section-head p{color:var(--gray);font-size:15.5px;}
+
+  /* ============ LOGO ============ */
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo img{width:42px;height:42px;flex-shrink:0;border-radius:50%;object-fit:cover;}
+  .logo-text{font-family:'Nunito',sans-serif;font-weight:900;font-size:18px;line-height:1;}
+  .logo-text span{display:block;font-size:10.5px;letter-spacing:.05em;margin-top:2px;}
+
+  /* ============ APP SHELL ============ */
+  .app{display:grid;grid-template-columns:264px 1fr;min-height:100vh;}
+  .sidebar{background:var(--sidebar);color:#fff;position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 22px;display:flex;flex-direction:column;gap:24px;z-index:100;}
+  .sidebar .logo-text{color:#fff;}
+  .sidebar .logo-text span{color:var(--accent);}
+  .side-nav{display:flex;flex-direction:column;gap:4px;}
+  .side-nav a{padding:11px 14px;border-radius:12px;font-weight:700;font-size:13.5px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:10px;transition:background .15s,color .15s;}
+  .side-nav a:hover,.side-nav a.active{background:rgba(255,255,255,.08);color:#fff;}
+  .side-block{background:rgba(255,255,255,.05);border-radius:14px;padding:14px 16px;font-size:12.5px;color:rgba(255,255,255,.7);}
+  .side-block b{display:block;color:#fff;font-size:13px;margin-bottom:3px;}
+  .side-cart{margin-top:auto;background:linear-gradient(150deg,rgba(234,91,12,.25),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px;}
+  .side-cart-row{display:flex;justify-content:space-between;font-size:12.5px;color:rgba(255,255,255,.7);margin-bottom:4px;}
+  .side-cart-row.total{color:#fff;font-weight:800;font-size:16px;margin:8px 0 12px;}
+  .side-cart .btn{width:100%;}
+
+  .main{min-width:0;}
+  .container{max-width:1080px;margin:0 auto;padding:0 28px;}
+
+  .topbar{display:none;position:sticky;top:0;background:rgba(255,248,240,.92);backdrop-filter:blur(8px);z-index:150;border-bottom:1px solid rgba(154,58,6,.08);padding:14px 20px;align-items:center;justify-content:space-between;}
+  .topbar .logo-text{color:var(--dark);}
+  .topbar .logo-text span{color:var(--primary);}
+  .icon-btn{width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid rgba(154,58,6,.15);display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;}
+  .icon-btn .count{position:absolute;top:-4px;right:-4px;background:var(--primary);color:#fff;font-size:10px;font-weight:800;width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .topbar-left{display:flex;align-items:center;gap:12px;}
+  #menuToggleBtn{font-size:18px;}
+  .sidebar-backdrop{display:none;}
+  .sidebar-backdrop.show{display:block;position:fixed;inset:0;background:rgba(20,10,4,.5);z-index:290;}
+
+  /* ============ HERO (full gradient, v1 style) ============ */
+  .hero{position:relative;overflow:hidden;background:radial-gradient(circle at 8% 25%,rgba(156,58,6,.5) 0%,transparent 48%),radial-gradient(circle at 92% 10%,#FFEDD8 0%,transparent 45%),linear-gradient(135deg,#FDBA74 0%,#FFC98A 55%,#FFE3C2 100%);color:#fff;padding:64px 0 54px;}
+  .hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.08) 1.5px,transparent 1.5px);background-size:22px 22px;opacity:.5;pointer-events:none;}
+  .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center;}
+  .hero h1{font-size:clamp(30px,4.4vw,46px);margin-bottom:16px;letter-spacing:-.5px;}
+  .hero p.lead{font-size:16.5px;opacity:.92;max-width:440px;margin-bottom:26px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px;}
+  .hero-stats{display:flex;gap:24px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.2);padding-top:20px;}
+  .hero-stats .hs b{display:block;font-family:'Nunito',sans-serif;font-size:22px;}
+  .hero-stats .hs span{font-size:11.5px;opacity:.8;}
+  .hero-visual{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-size:110px;}
+  .hero-visual .float-card{position:absolute;background:#fff;color:var(--dark);border-radius:14px;padding:11px 15px;font-size:12.5px;font-weight:800;box-shadow:0 12px 26px rgba(0,0,0,.18);display:flex;align-items:center;gap:8px;}
+  .logo-live{position:relative;width:82%;aspect-ratio:1/1;animation:heroLogoPulse 4.5s ease-in-out infinite;}
+  .logo-live::after{content:'';position:absolute;inset:-16px;border-radius:50%;background:radial-gradient(circle,rgba(255,138,61,.55),transparent 70%);filter:blur(8px);z-index:-1;animation:heroGlowPulse 4.5s ease-in-out infinite;}
+  .hero-logo-big{width:100%;height:100%;display:block;border-radius:50%;object-fit:cover;filter:drop-shadow(0 22px 40px rgba(0,0,0,.35));}
+  .logo-shine{transform-origin:50px 50px;animation:logoShineSpin 6s linear infinite;}
+  @keyframes heroLogoPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.035);}}
+  @keyframes heroGlowPulse{0%,100%{opacity:.35;transform:scale(1);}50%{opacity:.7;transform:scale(1.08);}}
+  @keyframes logoShineSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+  .fc-1{top:8%;left:-8%;}
+  .fc-2{bottom:10%;right:-6%;}
+
+
+  /* ============ ADVANTAGES (grid, v1 style) ============ */
+  .adv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .adv-card{background:#fff;border-radius:var(--radius);padding:24px 20px;box-shadow:var(--shadow);border:1px solid rgba(154,58,6,.06);transition:transform .2s;}
+  .adv-card:hover{transform:translateY(-5px);}
+  .adv-ic{width:48px;height:48px;border-radius:13px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;}
+  .adv-card h3{font-size:15.5px;margin-bottom:6px;}
+  .adv-card p{font-size:13px;color:var(--gray);}
+
+  /* ============ MENU ============ */
+  .menu-section{background:#fff;border-radius:26px;}
+  .menu-sticky-head{position:sticky;top:0;background:#fff;z-index:40;padding-top:14px;}
+  .tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;}
+  .tab{padding:10px 20px;border-radius:999px;font-weight:700;font-size:13.5px;cursor:pointer;border:1.5px solid rgba(154,58,6,.15);background:#fff;color:var(--dark);transition:all .15s;}
+  .tab.active,.tab:hover{background:var(--primary);border-color:var(--primary);color:#fff;}
+  .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .menu-card{border-radius:var(--radius);border:1px solid rgba(154,58,6,.08);overflow:hidden;background:#fff;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .2s;}
+  .menu-card:hover{transform:translateY(-4px);}
+  .menu-thumb{aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:linear-gradient(150deg,var(--accent-light),var(--accent));position:relative;}
+  .menu-thumb .badge{position:absolute;top:10px;left:10px;background:var(--dark);color:#fff;font-size:10px;font-weight:800;padding:4px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em;z-index:2;}
+  .menu-thumb .ph-emoji{font-size:32px;opacity:.85;}
+  .menu-thumb .ph-caption{font-size:10px;font-weight:800;color:var(--primary-dark);text-transform:uppercase;letter-spacing:.04em;opacity:.55;}
+  .menu-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s;}
+  .menu-thumb img.loaded{opacity:1;}
+  .menu-body{padding:15px 16px 17px;display:flex;flex-direction:column;gap:7px;flex:1;}
+  .menu-body h4{font-size:15px;}
+  .menu-body .desc{font-size:12.5px;color:var(--gray);flex:1;}
+  .menu-meta{font-size:11.5px;color:var(--gray);font-weight:700;}
+  .menu-foot{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
+  .price{font-weight:900;font-size:16.5px;font-family:'Nunito',sans-serif;}
+  .price-old{font-size:11.5px;color:var(--gray);text-decoration:line-through;font-weight:700;margin-right:4px;}
+  .add-btn{width:34px;height:34px;border-radius:50%;background:var(--primary);color:#fff;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;}
+  .add-btn:hover{background:var(--primary-dark);}
+  .qty-stepper{display:flex;align-items:center;gap:8px;background:var(--accent-light);border-radius:999px;padding:3px 5px;}
+  .qty-stepper button{width:27px;height:27px;border-radius:50%;border:none;background:#fff;font-size:14px;font-weight:800;cursor:pointer;color:var(--primary-dark);}
+  .cat-folders{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .cat-folder{border-radius:var(--radius);border:1px solid rgba(154,58,6,.08);overflow:hidden;background:#fff;box-shadow:var(--shadow);cursor:pointer;transition:transform .2s;text-align:center;}
+  .cat-folder:hover{transform:translateY(-4px);}
+  .cat-folder-thumb{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(150deg,var(--accent-light),var(--accent));position:relative;}
+  .cat-folder-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s;}
+  .cat-folder-thumb img.loaded{opacity:1;}
+  .cat-folder-name{padding:13px 8px;font-weight:800;font-size:14px;}
+  .back-btn{display:none;align-items:center;gap:8px;background:none;border:none;color:var(--primary-dark);font-weight:800;font-size:14px;cursor:pointer;margin:0;padding:0 0 14px;}
+  .back-btn:hover{text-decoration:underline;}
+  .qty-stepper span{font-weight:800;min-width:14px;text-align:center;font-size:13px;}
+
+  .promo{background:linear-gradient(120deg,var(--dark),#4a2508);color:#fff;border-radius:22px;padding:32px 34px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:40px;}
+  .promo h3{font-size:20px;margin-bottom:6px;}
+  .promo p{opacity:.8;font-size:13.5px;}
+
+  /* ============ ABOUT ============ */
+  .about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:center;}
+  .about-visual{width:100%;min-height:220px;margin:0 auto;border-radius:24px;background:linear-gradient(160deg,var(--accent-light),var(--accent));display:flex;align-items:center;justify-content:center;font-size:96px;position:relative;overflow:hidden;}
+  .about-visual::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.5),transparent 60%);}
+  .about-visual img{display:block;position:relative;z-index:1;width:100%;height:auto;object-fit:contain;opacity:0;transition:opacity .3s;}
+  .about-visual img.loaded{opacity:1;}
+  .about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px;}
+  .stat{background:var(--cream);border-radius:14px;padding:16px;text-align:center;}
+  .stat b{display:block;font-family:'Nunito',sans-serif;font-size:22px;color:var(--primary);}
+  .stat span{font-size:11.5px;color:var(--gray);font-weight:700;}
+
+  /* ============ DELIVERY (grid, v1 style) ============ */
+  .delivery-section{background:linear-gradient(160deg,var(--cream),var(--accent-light));border-radius:26px;}
+  .delivery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .del-card{border:1.5px solid rgba(154,58,6,.1);border-radius:var(--radius);padding:24px;}
+  .del-card .adv-ic{background:var(--cream);}
+  .del-card h3{margin-bottom:8px;font-size:15.5px;}
+  .del-card p{color:var(--gray);font-size:13px;margin-bottom:12px;}
+  .del-card ul li{font-size:12.5px;color:var(--dark);padding:4px 0;}
+  .pay-icons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+  .pay-icons span{background:var(--cream);padding:6px 12px;border-radius:10px;font-size:11.5px;font-weight:700;}
+
+  /* ============ REVIEWS (grid, v1 style) ============ */
+  .reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .review-card{background:#fff;border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);border:1px solid rgba(154,58,6,.06);}
+  .stars{color:var(--primary);font-size:14px;margin-bottom:10px;letter-spacing:2px;}
+  .review-card p{font-size:13.5px;color:var(--dark);margin-bottom:16px;}
+  .reviewer{display:flex;align-items:center;gap:10px;}
+  .avatar{width:38px;height:38px;border-radius:50%;background:var(--accent-light);color:var(--primary-dark);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .reviewer b{font-size:13px;display:block;}
+  .reviewer span{font-size:11px;color:var(--gray);}
+
+  /* ============ CONTACTS ============ */
+  .contacts-section{background:linear-gradient(180deg,var(--dark),#3a1c08);color:#fff;border-radius:26px;}
+  .contacts-section .section-head p{color:rgba(255,255,255,.7);}
+  .contacts-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:34px;}
+  .contact-list li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.1);}
+  .contact-list .ic{width:38px;height:38px;flex-shrink:0;border-radius:11px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:17px;}
+  .contact-list b{display:block;font-size:13.5px;}
+  .contact-list span{font-size:12.5px;color:rgba(255,255,255,.65);}
+  .map-box{border-radius:var(--radius);overflow:hidden;aspect-ratio:16/10;border:1px solid rgba(255,255,255,.15);}
+  .map-box iframe{width:100%;height:100%;border:0;display:block;}
+  .form-box{background:rgba(255,255,255,.06);border-radius:var(--radius);padding:22px;border:1px solid rgba(255,255,255,.1);}
+  .form-box input,.form-box textarea{width:100%;padding:12px 14px;border-radius:11px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:#fff;font-family:inherit;font-size:13.5px;margin-bottom:10px;}
+  .form-box textarea{resize:vertical;min-height:70px;}
+
+  footer{padding:26px 0;text-align:center;color:var(--gray);font-size:12px;}
+
+  /* ============ CART DRAWER (v1 style, slide from right) ============ */
+  .cart-overlay{position:fixed;inset:0;background:rgba(20,10,3,.5);z-index:400;opacity:0;pointer-events:none;transition:opacity .25s;}
+  .cart-overlay.open{opacity:1;pointer-events:auto;}
+  .cart-drawer{position:fixed;top:0;right:0;height:100%;width:420px;max-width:92vw;background:#fff;z-index:401;transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column;box-shadow:-20px 0 50px rgba(0,0,0,.2);}
+  .cart-drawer.open{transform:translateX(0);}
+  .cart-head{display:flex;justify-content:space-between;align-items:center;padding:22px 24px;border-bottom:1px solid rgba(154,58,6,.1);}
+  .cart-head h3{font-size:19px;}
+  .cart-close{width:36px;height:36px;border-radius:50%;border:none;background:var(--cream);font-size:18px;cursor:pointer;}
+  .cart-items{flex:1;overflow-y:auto;padding:10px 24px;}
+  .cart-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid rgba(154,58,6,.07);}
+  .cart-item .thumb{width:58px;height:58px;border-radius:12px;background:linear-gradient(150deg,var(--accent-light),var(--accent));display:flex;align-items:center;justify-content:center;font-size:25px;flex-shrink:0;position:relative;overflow:hidden;}
+  .cart-item .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s;}
+  .cart-item .thumb img.loaded{opacity:1;}
+  .cart-item-info{flex:1;}
+  .cart-item-info h5{font-size:14px;margin-bottom:4px;}
+  .cart-item-row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
+  .remove-btn{background:none;border:none;color:var(--gray);font-size:11.5px;cursor:pointer;text-decoration:underline;}
+  .cart-empty{text-align:center;padding:56px 20px;color:var(--gray);}
+  .cart-empty .em{font-size:46px;margin-bottom:12px;}
+  .cart-summary{padding:18px 24px 24px;border-top:1px solid rgba(154,58,6,.1);}
+  .sum-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--gray);margin-bottom:7px;}
+  .sum-row.total{color:var(--dark);font-weight:800;font-size:17px;margin-top:8px;}
+  .cart-summary .btn{width:100%;margin-top:14px;}
+  .min-order-note{font-size:11.5px;color:var(--gray);margin-top:8px;text-align:center;}
+
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--dark);color:#fff;padding:13px 20px;border-radius:12px;font-size:13px;font-weight:700;z-index:500;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none;}
+  .toast.show{opacity:1;transform:translateY(0);}
+
+  @media (max-width:980px){
+    .app{display:block;}
+    .sidebar{display:none;}
+    .topbar{display:flex;}
+    .menu-sticky-head{top:60px;}
+    .tab{padding:8px 14px;font-size:10.8px;}
+    .cat-folders{grid-template-columns:repeat(2,1fr);gap:16px;}
+    .cat-folder-thumb{font-size:50px;}
+    .cat-folder-name{font-size:16px;}
+    .hero-grid{grid-template-columns:1fr;display:flex;flex-direction:column;}
+    .hero-content{order:2;}
+    .hero-visual{order:1;max-width:320px;margin:0 auto 28px;font-size:80px;}
+    .adv-grid{grid-template-columns:repeat(2,1fr);}
+    .menu-grid{grid-template-columns:repeat(2,1fr);}
+    .sidebar.mobile-open{display:flex;position:fixed;top:0;left:0;width:264px;max-width:82vw;height:100vh;z-index:300;box-shadow:0 0 40px rgba(0,0,0,.35);animation:sidebarSlideIn .25s ease;}
+    @keyframes sidebarSlideIn{from{transform:translateX(-100%);}to{transform:translateX(0);}}
+    .about-grid,.contacts-grid{grid-template-columns:1fr;}
+    .delivery-grid{grid-template-columns:1fr;}
+    .reviews-grid{grid-template-columns:1fr;}
+    .container{padding:0 18px;}
+  }
+  @media (max-width:560px){
+    .section{padding:50px 0;}
+    .adv-grid{grid-template-columns:1fr;}
+    .menu-grid{grid-template-columns:1fr;}
+    .promo{flex-direction:column;text-align:center;}
+    .cart-drawer{width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+  <!-- ============ SIDEBAR (v2 mechanic) ============ -->
+  <aside class="sidebar">
+    <a href="#top" class="logo">
+      <img src="images/logo.png" alt="Кимс суши">
+      <div class="logo-text">Кимс суши<span>ДОСТАВКА СУШИ</span></div>
+    </a>
+    <nav class="side-nav">
+      <a href="#top" class="active">Главная</a>
+      <a href="#menu">Меню</a>
+      <a href="#about">О нас</a>
+      <a href="#delivery">Доставка</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <div class="side-block"><b>🕒 Часы работы</b>Пн–Чт, Вс: 11:00–22:00<br>Пт–Сб: 11:00–23:00</div>
+    <div class="side-block"><b>📞 Телефон</b><a href="tel:73512164050" style="color:inherit;">+7 (351) 216-40-50</a></div>
+    <div class="side-block"><b>📍 Адрес</b>ул. Достоевского, 16, Челябинск</div>
+    <div class="side-cart">
+      <div class="side-cart-row"><span>Товаров</span><span id="sideCount">0</span></div>
+      <div class="side-cart-row total"><span>Итого</span><span id="sideTotal">0 ₽</span></div>
+      <button class="btn btn-primary" id="sideCartBtn">Открыть корзину</button>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn" id="menuToggleBtn">☰</button>
+        <div class="logo-text">Кимс суши<span style="color:var(--gray);">доставка суши</span></div>
+      </div>
+      <button class="icon-btn" id="topCartBtn">🛒<span class="count" id="topCount">0</span></button>
+    </div>
+
+    <!-- ============ HERO (v1 style, full gradient) ============ -->
+    <section class="hero" id="top">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span class="eyebrow" style="background:rgba(255,255,255,.18);color:#fff;">Пн–Чт, Вс: 11:00–22:00 · Пт–Сб: 11:00–23:00</span>
+          <h1>Свежие суши и роллы<br>с доставкой за 60 минут</h1>
+          <p class="lead">Каждое блюдо — как для себя: свежо, горячо и с заботой 😋 Мы открылись и готовы вас радовать вкусными и свежими роллами в Челябинске!</p>
+          <div class="hero-actions">
+            <a href="#menu" class="btn btn-primary" style="background:#fff;color:var(--primary-dark);box-shadow:0 8px 20px rgba(0,0,0,.2);">Смотреть меню</a>
+            <a href="#delivery" class="btn btn-outline">Как заказать</a>
+          </div>
+          <div class="hero-stats">
+            <div class="hs"><b>4.8★</b><span>1200+ отзывов</span></div>
+            <div class="hs"><b>60 мин</b><span>средняя доставка</span></div>
+            <div class="hs"><b>40+</b><span>позиций в меню</span></div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="logo-live">
+            <img class="hero-logo-big" src="images/logo.png" alt="Кимс суши">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- ============ MENU ============ -->
+      <section class="section menu-section" id="menu" style="padding:40px 32px;">
+        <div class="section-head">
+          <span class="eyebrow">Меню</span>
+          <h2>Выберите свои роллы</h2>
+          <p>Цены и фото — примерные, обновим на реальные данные вашего ресторана.</p>
+        </div>
+        <div class="menu-sticky-head">
+          <div class="tabs" id="tabs"></div>
+          <button class="back-btn" id="backBtn">← Назад к категориям</button>
+        </div>
+        <div class="cat-folders" id="catFolders"></div>
+        <div class="menu-grid" id="menuGrid"></div>
+        <div class="promo">
+          <div><h3>Новинка скоро здесь 🎉</h3><p>Место для акции или новой позиции меню — обновим, когда будет новый ассортимент.</p></div>
+          <a href="#menu" class="btn btn-primary" style="background:#fff;color:var(--dark);">Смотреть меню</a>
+        </div>
+      </section>
+
+      <!-- ============ ABOUT ============ -->
+      <section class="section" id="about">
+        <div class="about-grid">
+          <div class="about-visual"><img src="images/about-team.jpg" alt="О нас" loading="lazy" onload="this.classList.add('loaded')" onerror="this.remove()"></div>
+          <div>
+            <span class="eyebrow">О нас</span>
+            <h2>Мы готовим суши так,<br>как готовили бы для себя</h2>
+            <p style="color:var(--gray);font-size:15px;margin-top:12px;">Кимс суши — команда поваров и курьеров, объединённых одной идеей: суши должны быть свежими, честными по составу и приезжать вовремя.</p>
+            <div class="about-stats">
+              <div class="stat"><b>5+</b><span>лет на рынке</span></div>
+              <div class="stat"><b>40+</b><span>позиций в меню</span></div>
+              <div class="stat"><b>1200+</b><span>клиентов</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ DELIVERY (grid) ============ -->
+      <section class="section delivery-section" id="delivery" style="padding:44px 32px;">
+        <div class="section-head">
+          <span class="eyebrow">Доставка и оплата</span>
+          <h2>Как оформить заказ</h2>
+          <p>Три простых шага — от выбора роллов до ужина на столе.</p>
+        </div>
+        <div class="delivery-grid">
+          <div class="del-card"><div class="adv-ic">🛒</div><h3>1. Выберите блюда</h3><p>Добавьте роллы и сеты в корзину прямо на сайте.</p><ul><li>✔️ Минимальный заказ — 700 ₽</li><li>✔️ Бесплатная доставка от 1500 ₽</li></ul></div>
+          <div class="del-card"><div class="adv-ic">💳</div><h3>2. Оплата при получении</h3><p>Принимаем разные способы оплаты.</p><div class="pay-icons"><span>💵 Наличные</span><span>💳 Картой</span><span>📱 СБП</span></div></div>
+          <div class="del-card"><div class="adv-ic">⏱</div><h3>3. Получите заказ</h3><p>Курьер привезёт заказ в течение 60 минут.</p><ul><li>✔️ Зона доставки — весь город</li><li>✔️ Отслеживание статуса</li></ul></div>
+        </div>
+      </section>
+
+      <!-- ============ REVIEWS (grid) ============ -->
+      <section class="section" id="reviews">
+        <div class="section-head">
+          <span class="eyebrow">Отзывы</span>
+          <h2>Что говорят наши гости</h2>
+          <p>Примеры отзывов — заменим на реальные из Яндекс.Карт или 2ГИС.</p>
+        </div>
+        <div class="reviews-grid">
+          <div class="review-card"><div class="stars">★★★★★</div><p>«Заказываю Кимс суши уже полгода — рыба всегда свежая, роллы плотные. Курьер приехал даже раньше времени».</p><div class="reviewer"><div class="avatar">АМ</div><div><b>Анна М.</b><span>Постоянный клиент</span></div></div></div>
+          <div class="review-card"><div class="stars">★★★★★</div><p>«Заказывали сет «Токио» на день рождения — всем понравилось, ничего не осталось».</p><div class="reviewer"><div class="avatar">ДК</div><div><b>Дмитрий К.</b><span>Заказ на компанию</span></div></div></div>
+          <div class="review-card"><div class="stars">★★★★★</div><p>«Лучшая доставка суши в городе на мой вкус. Спайси роллы — топ».</p><div class="reviewer"><div class="avatar">ЕС</div><div><b>Елена С.</b><span>Постоянный клиент</span></div></div></div>
+        </div>
+      </section>
+
+      <!-- ============ CONTACTS ============ -->
+      <section class="section contacts-section" id="contacts" style="padding:44px 32px;">
+        <div class="section-head">
+          <span class="eyebrow" style="background:rgba(255,255,255,.12);color:#fff;">Контакты</span>
+          <h2>Свяжитесь с нами</h2>
+        </div>
+        <div class="contacts-grid">
+          <div>
+            <ul class="contact-list">
+              <li><span class="ic">📍</span><div><b>Адрес</b><span>ул. Достоевского, 16, Челябинск</span></div></li>
+              <li><span class="ic">📞</span><div><b>Телефон</b><span><a href="tel:73512164050" style="color:inherit;">+7 (351) 216-40-50</a></span></div></li>
+              <li><span class="ic">✉️</span><div><b>Email</b><span>info@kims-sushi.ru</span></div></li>
+              <li><span class="ic">🕒</span><div><b>Часы работы</b><span>Пн–Чт, Вс: 11:00–22:00 · Пт–Сб: 11:00–23:00</span></div></li>
+            </ul>
+            <div class="map-box"><iframe src="https://www.google.com/maps?q=ул.+Достоевского+16,+Челябинск&output=embed" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="Кимс суши на карте"></iframe></div>
+          </div>
+          <div class="form-box">
+            <h3 style="margin-bottom:14px;font-size:16px;">Остались вопросы?</h3>
+            <form id="contactForm">
+              <input type="text" placeholder="Ваше имя" required>
+              <input type="tel" placeholder="Телефон" required>
+              <textarea placeholder="Комментарий (необязательно)"></textarea>
+              <button type="submit" class="btn btn-primary" style="width:100%;">Отправить</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <footer>© 2026 Кимс суши · Все права защищены</footer>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CART DRAWER ============ -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-head"><h3>Ваша корзина</h3><button class="cart-close" id="cartCloseBtn">✕</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-summary" id="cartSummary"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ DATA ============ */
+/* Категории меню — добавляйте сюда новые категории товаров */
+const CATEGORIES = [
+  {id:'cold-rolls', label:'Холодные роллы', icon:'🍣'},
+  {id:'baked-rolls', label:'Запечённые роллы', icon:'🔥'},
+  {id:'tempura-rolls', label:'Горячие роллы в кляре', icon:'🍤'},
+  {id:'sety', label:'Сеты', icon:'🍱'},
+  {id:'zakuski', label:'Закуски', icon:'🍟'},
+  {id:'dobavki', label:'Добавки к заказу', icon:'🥢'},
+];
+
+/* Позиции меню — добавляйте сюда новые товары (cat должен совпадать с id категории выше) */
+const MENU = [
+  {id:1, cat:'cold-rolls', name:'Канада', desc:'Рис, нори, сыр сливочный, огурец, угорь, унаги соус, кунжут белый', weight:'8 шт / 290 г', price:500, emoji:'🍣', img:'roll-kanada.jpg'},
+  {id:2, cat:'cold-rolls', name:'Аляска', desc:'Рис, нори, лосось, сыр сливочный, огурец, тигровая креветка (варёная)', weight:'8 шт / 265 г', price:450, emoji:'🍣', img:'roll-alyaska.jpg'},
+  {id:3, cat:'cold-rolls', name:'Нирвана', desc:'Рис, нори, лосось, огурец, снежный краб, майонез, тобико икра', weight:'8 шт / 295 г', price:480, emoji:'🍣', img:'roll-nirvana.jpg'},
+  {id:4, cat:'cold-rolls', name:'Новелла', desc:'Рис, нори, сыр сливочный, огурец, под шапкой спайс гребешком и унаги соусом, кунжут', weight:'8 шт / 280 г', price:410, emoji:'🍣', img:'roll-novella.jpg'},
+  {id:5, cat:'cold-rolls', name:'Филадельфия классик', desc:'Рис, нори, сыр сливочный, лосось', weight:'8 шт / 290 г', price:535, emoji:'🍣', img:'roll-filadelfiya-klassik.jpg'},
+  {id:6, cat:'baked-rolls', name:'Киото', desc:'Рис, нори, лосось жареный, огурец, сыр сливочный, сырная шапка, унаги соус, кунжут белый', weight:'8 шт / 295 г', price:440, emoji:'🔥', img:'baked-kioto.jpg'},
+  {id:7, cat:'baked-rolls', name:'Акадзи', desc:'Рис, нори, тобико икра, креветка тигровая (варёная), сыр сливочный, сырная шапка, унаги соус, кунжут белый', weight:'8 шт / 290 г', price:405, emoji:'🔥', img:'baked-akadzi.jpg'},
+  {id:8, cat:'baked-rolls', name:'Фудзи', desc:'Рис, нори, снежный краб, угорь, огурец, тобико, майонез, спайс соус, унаги соус, кунжут', weight:'8 шт / 325 г', price:440, emoji:'🔥', img:'baked-fudzi.jpg'},
+  {id:9, cat:'baked-rolls', name:'Осень', desc:'Рис, нори, лосось в кляре, тобико икра, сыр сливочный, спайс соус, сырная шапка, унаги соус, кунжут белый', weight:'8 шт / 310 г', price:450, emoji:'🔥', img:'baked-osen.jpg'},
+  {id:10, cat:'baked-rolls', name:'Эби Чиз ролл', desc:'Рис, нори, креветка в кляре, сыр сливочный, сыр пармезан, майонез, унаги соус, кунжут белый', weight:'8 шт / 240 г', price:400, emoji:'🔥', img:'baked-ebi-chiz.jpg'},
+  {id:11, cat:'tempura-rolls', name:'Азия', desc:'Рис, нори, креветка, бекон с/к, спайс соус, кляр, унаги соус', weight:'8 шт / 315 г', price:395, emoji:'🍤', img:'tempura-aziya.jpg'},
+  {id:12, cat:'tempura-rolls', name:'Ногано', desc:'Рис, нори, угорь, омлет, огурец, майонез, унаги соус', weight:'8 шт / 285 г', price:390, emoji:'🍤', img:'tempura-nogano.jpg'},
+  {id:13, cat:'tempura-rolls', name:'Европа', desc:'Рис, нори, копчёная курица, огурец, майонез, болгарский перец жареный, кляр, унаги соус', weight:'8 шт / 320 г', price:370, emoji:'🍤', img:'tempura-evropa.jpg'},
+  {id:14, cat:'tempura-rolls', name:'Америка', desc:'Рис, нори, лосось, угорь, сыр сливочный, огурец, кляр, унаги соус', weight:'8 шт / 325 г', price:470, emoji:'🍤', img:'tempura-amerika.jpg'},
+  {id:15, cat:'tempura-rolls', name:'Темпура с лососем', desc:'Рис, нори, лосось, майонез, огурец, зелёный лук, кляр, унаги соус', weight:'8 шт / 295 г', price:450, emoji:'🍤', img:'tempura-s-lososem.jpg'},
+  {id:16, cat:'sety', name:'Хот на двоих', desc:'Азия, Америка, Европа', weight:'24 шт / 960 г', price:1130, emoji:'🍱', img:'set-hot-na-dvoih.jpg'},
+  {id:17, cat:'sety', name:'Эби сет', desc:'Юми, Креветка спайс, Аляска, Эби чиз, Эби идзумитай', weight:'40 шт / 1170 г', price:1670, emoji:'🍱', img:'set-ebi.jpg'},
+  {id:18, cat:'sety', name:'Сяке сет', desc:'Филадельфия классик, Филадельфия лайт, Ролл с лососем, Сяке спайс', weight:'32 шт / 995 г', price:1750, emoji:'🍱', img:'set-syake.jpg'},
+  {id:19, cat:'sety', name:'Сет №2', desc:'Тори запечённый, Осень, Фудзи, Акадзи, Европа, Азия, Америка', weight:'56 шт / 2150 г', price:2700, emoji:'🍱', img:'set-nomer-2.jpg'},
+  {id:20, cat:'sety', name:'Пикантный', desc:'Овощной, Инь Янь, Темпура с лососем, Тори маки, Нирвана, Запечённый ролл с беконом', weight:'48 шт / 1525 г', price:1995, emoji:'🍱', img:'set-pikantnyy.jpg'},
+  {id:21, cat:'zakuski', name:'Рисовый Корн Дог', desc:'Начинка на выбор: сосиска, сыр, сосиска+сыр. Состав: рис, нори, шампиньоны, болгарский перец, морковь, репчатый лук, начинка (на выбор), панировочные сухари, унаги соус, кунжут', weight:'1 шт / 175 г', price:245, emoji:'🌭', img:'zakuski-risovyy-korn-dog.jpg'},
+  {id:22, cat:'zakuski', name:'Картошка фри', desc:'Картофель фри, кетчуп', weight:'110 г + соус 35 г', price:95, emoji:'🍟', img:'zakuski-kartofel-fri.jpg'},
+  {id:23, cat:'zakuski', name:'Картофель по-деревенски', desc:'Картофель по-деревенски, кетчуп', weight:'120 г + соус 35 г', price:115, emoji:'🥔', img:'zakuski-kartofel-po-derevenski.jpg'},
+  {id:24, cat:'dobavki', name:'Манго-маракуйя 0.5', desc:'Сок манго-маракуйя. Состав: сок маракуйи концентрированный, пюре манго, пюре яблочное концентрированное, сахар, лимонная кислота, вода', weight:'500 мл', price:120, emoji:'🥤', img:'dobavki-mango-marakuyya.jpg'},
+  {id:25, cat:'dobavki', name:'Морс Клюква 0.5', desc:'Морс клюква. Состав: клюква, сахар, вода, сок клюквы концентрированный', weight:'500 мл', price:120, emoji:'🥤', img:'dobavki-mors-klyukva.jpg'},
+  {id:26, cat:'dobavki', name:'Васаби', desc:'К роллам всегда добавляем васаби, но если нужно больше — можно заказать отдельно', weight:'10 г', price:10, emoji:'🟢', img:'dobavki-vasabi.jpg'},
+  {id:27, cat:'dobavki', name:'Спайс соус', desc:'Слегка островатый соус. Состав: майонез, чеснок, лук, соус кимчи, соус шрирача, специи шичими', weight:'50 г', price:30, emoji:'🌶️', img:'dobavki-spays-sous.jpg'},
+  {id:28, cat:'dobavki', name:'Имбирь', desc:'К роллам всегда добавляем имбирь, но если нужно больше — можно заказать отдельно', weight:'20 г', price:10, emoji:'🫚', img:'dobavki-imbir.jpg'},
+  {id:29, cat:'dobavki', name:'Соус Унаги', desc:'Состав: соевый соус, мирин, сахар, белое вино', weight:'50 г', price:20, emoji:'🥫', img:'dobavki-sous-unagi.jpg'},
+  {id:30, cat:'dobavki', name:'Кетчуп', desc:'Кетчуп', weight:'50 г', price:25, emoji:'🍅', img:'dobavki-ketchup.jpg'},
+];
+const FREE_DELIVERY_FROM = 1500;
+const DELIVERY_FEE = 200;
+const MIN_ORDER = 700;
+const RESTAURANT_WHATSAPP = '73512164050';
+
+let cart = JSON.parse(localStorage.getItem('sushihot_cart_v5') || '{}');
+function saveCart(){
+  localStorage.setItem('sushihot_cart_v5', JSON.stringify(cart));
+  renderBadges();
+  renderCartDrawer();
+}
+function addToCart(id){ cart[id]=(cart[id]||0)+1; saveCart(); showToast('Добавлено в корзину'); }
+function changeQty(id,delta){ if(!cart[id])return; cart[id]+=delta; if(cart[id]<=0) delete cart[id]; saveCart(); }
+function removeFromCart(id){ delete cart[id]; saveCart(); }
+function clearCartConfirm(){ if(Object.keys(cart).length===0) return; if(!confirm('Очистить корзину?')) return; cart={}; saveCart(); }
+function cartCount(){ return Object.values(cart).reduce((a,b)=>a+b,0); }
+function cartSubtotal(){ return Object.entries(cart).reduce((s,[id,q])=>{const it=MENU.find(m=>m.id==id);return s+(it?it.price*q:0);},0); }
+function fmt(n){ return n.toLocaleString('ru-RU')+' ₽'; }
+
+/* ============ MENU RENDER ============ */
+const menuGrid = document.getElementById('menuGrid');
+function renderTabs(){
+  const tabsEl = document.getElementById('tabs');
+  const saleTab = MENU.some(m=>m.oldPrice) ? `<div class="tab" data-cat="sale">🔥 Скидки</div>` : '';
+  tabsEl.innerHTML = `<div class="tab active" data-cat="all">Всё меню</div>${saleTab}` +
+    CATEGORIES.map(c=>`<div class="tab" data-cat="${c.id}">${c.label}</div>`).join('');
+}
+function renderMenu(cat){
+  const items = cat==='all' ? MENU : cat==='sale' ? MENU.filter(m=>m.oldPrice) : MENU.filter(m=>m.cat===cat);
+  menuGrid.innerHTML = items.map(item=>`
+    <div class="menu-card">
+      <div class="menu-thumb">${item.tag?`<span class="badge">${item.tag}</span>`:''}<span class="ph-emoji">${item.emoji}</span><span class="ph-caption">Фото скоро</span><img src="images/${item.img}" alt="${item.name}" loading="lazy" onload="this.classList.add('loaded');this.previousElementSibling.style.display='none';this.previousElementSibling.previousElementSibling.style.display='none';" onerror="this.remove()"></div>
+      <div class="menu-body">
+        <h4>${item.name}</h4>
+        <p class="desc">${item.desc}</p>
+        <div class="menu-meta">${item.weight}</div>
+        <div class="menu-foot">
+          <span class="price">${item.oldPrice?`<span class="price-old">${fmt(item.oldPrice)}</span>`:''}${fmt(item.price)}</span>
+          <div id="ctrl-${item.id}"></div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  items.forEach(item=>renderControl(item.id));
+}
+function renderControl(id){
+  const el = document.getElementById(`ctrl-${id}`);
+  if(!el) return;
+  const qty = cart[id]||0;
+  el.innerHTML = qty===0
+    ? `<button class="add-btn" onclick="addToCart(${id})">+</button>`
+    : `<div class="qty-stepper"><button onclick="changeQty(${id},-1)">−</button><span>${qty}</span><button onclick="changeQty(${id},1)">+</button></div>`;
+}
+function renderFolders(){
+  const foldersEl = document.getElementById('catFolders');
+  const cats = MENU.some(m=>m.oldPrice) ? [...CATEGORIES, {id:'sale', label:'Скидки', icon:'🔥'}] : CATEGORIES;
+  foldersEl.innerHTML = cats.map(c=>`
+    <div class="cat-folder" data-cat="${c.id}">
+      <div class="cat-folder-thumb">${c.icon}<img src="images/cat-${c.id}.jpg" alt="${c.label}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.remove()"></div>
+      <div class="cat-folder-name">${c.label}</div>
+    </div>
+  `).join('');
+}
+function showFolders(){
+  document.getElementById('catFolders').style.display = 'grid';
+  menuGrid.style.display = 'none';
+  document.getElementById('backBtn').style.display = 'none';
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+}
+function selectCategory(cat){
+  document.getElementById('catFolders').style.display = 'none';
+  menuGrid.style.display = 'grid';
+  document.getElementById('backBtn').style.display = 'inline-flex';
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.cat===cat));
+  renderMenu(cat);
+}
+document.getElementById('backBtn').addEventListener('click', showFolders);
+document.getElementById('catFolders').addEventListener('click', e=>{
+  const folder = e.target.closest('.cat-folder');
+  if(!folder) return;
+  selectCategory(folder.dataset.cat);
+});
+document.getElementById('tabs').addEventListener('click', e=>{
+  const tab = e.target.closest('.tab');
+  if(!tab) return;
+  selectCategory(tab.dataset.cat);
+});
+
+/* ============ BADGES ============ */
+function renderBadges(){
+  const count = cartCount();
+  const total = cartSubtotal();
+  document.getElementById('sideCount').textContent = count;
+  document.getElementById('sideTotal').textContent = fmt(total);
+  document.getElementById('topCount').textContent = count;
+  document.querySelectorAll('[id^="ctrl-"]').forEach(el=>renderControl(Number(el.id.split('-')[1])));
+}
+
+/* ============ CART DRAWER ============ */
+function renderCartDrawer(){
+  const itemsEl = document.getElementById('cartItems');
+  const summaryEl = document.getElementById('cartSummary');
+  const entries = Object.entries(cart);
+  if(entries.length===0){
+    itemsEl.innerHTML = `<div class="cart-empty"><div class="em">🍱</div>Корзина пока пуста.<br>Добавьте любимые роллы из меню!</div>`;
+    summaryEl.innerHTML = '';
+    return;
+  }
+  itemsEl.innerHTML = entries.map(([id,qty])=>{
+    const item = MENU.find(m=>m.id==id);
+    if(!item) return '';
+    return `
+      <div class="cart-item">
+        <div class="thumb">${item.emoji}<img src="images/${item.img}" alt="${item.name}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.remove()"></div>
+        <div class="cart-item-info">
+          <h5>${item.name}</h5>
+          <span style="font-size:12px;color:var(--gray);">${fmt(item.price)} / шт</span>
+          <div class="cart-item-row">
+            <div class="qty-stepper"><button onclick="changeQty(${item.id},-1)">−</button><span>${qty}</span><button onclick="changeQty(${item.id},1)">+</button></div>
+            <button class="remove-btn" onclick="removeFromCart(${item.id})">Удалить</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+  const subtotal = cartSubtotal();
+  const delivery = subtotal>=FREE_DELIVERY_FROM || subtotal===0 ? 0 : DELIVERY_FEE;
+  const total = subtotal+delivery;
+  const canCheckout = subtotal>=MIN_ORDER;
+  summaryEl.innerHTML = `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:10px;"><span onclick="clearCartConfirm()" style="cursor:pointer;font-size:13.5px;color:var(--gray);text-decoration:underline;">Очистить корзину</span></div>
+    <div class="sum-row"><span>Сумма заказа</span><span>${fmt(subtotal)}</span></div>
+    <div class="sum-row"><span>Доставка</span><span>${delivery===0?'Бесплатно':fmt(delivery)}</span></div>
+    <div class="sum-row total"><span>Итого</span><span>${fmt(total)}</span></div>
+    <button class="btn btn-primary" ${canCheckout?'':'disabled style="opacity:.5;cursor:not-allowed;"'} onclick="checkout()">Оформить заказ</button>
+    <div class="min-order-note">${canCheckout?'Оплата и подтверждение — при звонке курьера':`Минимальный заказ — ${fmt(MIN_ORDER)}`}</div>
+  `;
+}
+function checkout(){
+  const entries = Object.entries(cart);
+  if(entries.length===0) return;
+  const lines = entries.map(([id,qty])=>{const item=MENU.find(m=>m.id==id);return `• ${item.name} × ${qty} — ${fmt(item.price*qty)}`;});
+  const subtotal = cartSubtotal();
+  const delivery = subtotal>=FREE_DELIVERY_FROM ? 0 : DELIVERY_FEE;
+  const text = `Здравствуйте! Хочу сделать заказ в Кимс суши:\n${lines.join('\n')}\n\nДоставка: ${delivery===0?'бесплатно':fmt(delivery)}\nИтого: ${fmt(subtotal+delivery)}`;
+  window.open(`https://wa.me/${RESTAURANT_WHATSAPP}?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+/* ============ CART DRAWER OPEN/CLOSE ============ */
+const cartDrawer = document.getElementById('cartDrawer');
+const cartOverlay = document.getElementById('cartOverlay');
+function openCart(){ cartDrawer.classList.add('open'); cartOverlay.classList.add('open'); }
+function closeCart(){ cartDrawer.classList.remove('open'); cartOverlay.classList.remove('open'); }
+document.getElementById('sideCartBtn').addEventListener('click', openCart);
+document.getElementById('topCartBtn').addEventListener('click', openCart);
+document.getElementById('cartCloseBtn').addEventListener('click', closeCart);
+cartOverlay.addEventListener('click', closeCart);
+
+/* ============ MOBILE SIDEBAR DRAWER ============ */
+const sidebarEl = document.querySelector('.sidebar');
+const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+function openSidebar(){ sidebarEl.classList.add('mobile-open'); sidebarBackdrop.classList.add('show'); }
+function closeSidebar(){ sidebarEl.classList.remove('mobile-open'); sidebarBackdrop.classList.remove('show'); }
+document.getElementById('menuToggleBtn').addEventListener('click', openSidebar);
+sidebarBackdrop.addEventListener('click', closeSidebar);
+document.querySelectorAll('.side-nav a').forEach(a=>a.addEventListener('click', closeSidebar));
+
+/* ============ TOAST ============ */
+let toastTimer;
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toast.classList.remove('show'), 1700);
+}
+
+/* ============ CONTACT FORM ============ */
+document.getElementById('contactForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  showToast('Спасибо! Мы скоро свяжемся с вами.');
+  this.reset();
+});
+
+/* ============ ACTIVE NAV ON SCROLL ============ */
+const sections = ['top','menu','advantages','about','delivery','reviews','contacts'];
+window.addEventListener('scroll', ()=>{
+  let current = 'top';
+  sections.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el && el.getBoundingClientRect().top < 140) current = id;
+  });
+  document.querySelectorAll('.side-nav a').forEach(a=>{
+    a.classList.toggle('active', a.getAttribute('href')==='#'+current);
+  });
+});
+
+/* ============ INIT ============ */
+renderTabs();
+renderFolders();
+showFolders();
+renderBadges();
+renderCartDrawer();
+</script>
+</body>
+</html>
